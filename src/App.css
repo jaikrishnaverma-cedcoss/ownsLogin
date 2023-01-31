@@ -1,0 +1,16 @@
+.body{
+  width: 100%;
+}
+.login
+{
+  min-width:320px;
+  max-width:450px;
+  width:50%;
+  margin:20px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.myTable{
+  min-width: 900px !important;
+}
