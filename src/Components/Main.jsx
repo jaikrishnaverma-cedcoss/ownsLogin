@@ -11,9 +11,12 @@ import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import Errors from "./Errors";
 
 const Main = () => {
     // For grid columns data
+
+  let checker=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   const columnsData = [
     {
       align: "center",
@@ -50,7 +53,8 @@ const Main = () => {
     password: "",
     login: false,
     data: [],
-    auth:{username:'admin@gmail.com',password:'admin@123'}
+    auth:{username:'admin@gmail.com',password:'admin@123'},
+    lock:true
   });
 
 // modal toggler and toggle details holder state   
@@ -58,6 +62,7 @@ const Main = () => {
 
 //   login details verifier
   const Submitted = () => {
+    if(!state.lock){
     if (state.username === state.auth.username && state.password === state.auth.password) {
       state.username = "";
       state.password = "";
@@ -65,7 +70,7 @@ const Main = () => {
       setState({ ...state});
     } else {
       alert("Please Fill Correct Details...!");
-    }
+    }}
   };
 
 //   to fetch data from json placeholder by under useEffect hook
@@ -121,6 +126,7 @@ const Main = () => {
                 return (
                   <Button
                     onClick={() => {
+                       
                       setToggle({ ...toggle, toggle: true, details: obj });
                     }}
                   >
@@ -159,10 +165,11 @@ const Main = () => {
       <Card title="Login Form" extraClass="login">
         <FormElement   >
           <TextField
-            name="Username"
-            onChange={(val) => setState({ ...state, username: val })}
-            placeHolder="Enter Username"
+            name="Email"
+            onChange={(val) =>{state.lock=!checker.test(val);setState({ ...state, username: val })}}
+            placeHolder="Enter Email"
             value={state.username}
+            required
           />
           <TextField
             name="Password"
@@ -171,6 +178,7 @@ const Main = () => {
             type="password"
             placeHolder="*********"
             value={state.password}
+            required
           />
           <Button onClick={(val) => setState({ ...state, password: "" })}>
             Clear Password Value
@@ -179,6 +187,9 @@ const Main = () => {
           <Button  onClick={Submitted}>LogIn</Button>
         </FormElement>
       </Card>
+      {
+        (state.lock&&state.username!=='')?<Errors/>:<p></p>
+      }
     </>
   );
 };
